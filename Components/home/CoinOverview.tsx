@@ -4,11 +4,17 @@ import React from 'react'
 import Image from 'next/image';
 
 const CoinOverview = async () => {
-    
-      const coin = await fetcher<CoinDetailsData>('coins/bitcoin', {
+    let coin;
+
+    try{ 
+      coin = await fetcher<CoinDetailsData>('coins/bitcoin', {
         dex_pair_format: 'symbol'
       },);
-
+    } catch (error) {
+    console.error('Error fetching coin overview:', error);
+    return <div className="error">Failed to load coin overview</div>;
+  }
+  
   return (
     <div id='coin-overview'>
           <div className='header pt-2'>
