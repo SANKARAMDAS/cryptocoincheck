@@ -1,15 +1,25 @@
-import React, { Suspense } from 'react'
-import Image from 'next/image'
-import DataTable from '@/Components/DataTable'
-import { fetcher } from '@/lib/coingecko.actions'
-import { cn, formatCurrency } from '@/lib/utils'
-import Link from 'next/link'
-import { TrendingDown, TrendingUp } from 'lucide-react'
-import CoinOverview from '@/Components/home/CoinOverview'
-import TrendingCoins from '@/Components/home/TrendingCoins'
-import { CoinOverviewFallback, TrendingCoinsFallback } from '@/Components/home/fallback'
+import React from 'react'
+import Image from 'next/image';
+import Link from 'next/link';
+import { cn,} from '@/lib/utils';
+import { TrendingDown, TrendingUp } from 'lucide-react';
+import DataTable from '../DataTable';
+import { fetcher } from '@/lib/coingecko.actions';
 
- const columns: DataTableColumn<TrendingCoin>[] = [
+
+
+const TrendingCoins = async () => {
+    let trendingCoins;
+
+  try {
+    trendingCoins = await fetcher<{ coins: TrendingCoin[] }>('/search/trending', undefined, 300);
+  } catch (error) {
+    console.error('Error fetching trending coins:', error);
+    return <div className="error">Failed to load trending coins</div>;
+  }
+
+
+  const columns: DataTableColumn<TrendingCoin>[] = [
     {
       header: 'Name',
       cellClassName: 'name-cell',
@@ -50,31 +60,24 @@ import { CoinOverviewFallback, TrendingCoinsFallback } from '@/Components/home/f
       cellClassName: 'price-cell',
       cell: (coin) => `$${coin.item.data.price.toLocaleString()}`,
     },
-]
-
-const Page = async () => {
-
+  ];
 
   return (
-    <main className='main-container'>
-      <section className='home-grid'>
-        <Suspense fallback={<CoinOverviewFallback />}>
-          {/* @ts-expect-error Async Server Component */}
-           <CoinOverview />
-        </Suspense>
+    <div id="trending-coins">
+      <h4>Trending Coins</h4>
 
-        <Suspense fallback={<TrendingCoinsFallback />}>
-          {/* @ts-expect-error Async Server Component */}
-          <TrendingCoins />
-        </Suspense>
+      <DataTable
+        data={trendingCoins.coins.slice(0, 6) || []}
+        // data={(trendingCoins?.coins || []).slice(0, 6)}
+        columns={columns}
+        rowKey={(coin) => coin.item.id}
+        tableClassName="trending-coins-table"
+        headerCellClassName="py-3!"
+        bodyCellClassName="py-2!"
+      />
+    </div>
+  );
+};
 
-      </section>
 
-      <section className='w-full mt-7 space-y-4'>
-        <p>Categories</p>
-      </section>
-    </main>
-  )
-}
-
-export default Page
+export default TrendingCoins
