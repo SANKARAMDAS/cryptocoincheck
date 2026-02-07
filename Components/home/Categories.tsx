@@ -2,12 +2,19 @@ import { fetcher } from '@/lib/coingecko.actions'
 import React from 'react'
 import DataTable from '../DataTable';
 import Image from 'next/image';
-import { format } from 'path';
 import { cn, formatCurrency, formatPercentage } from '@/lib/utils';
 import { TrendingDown, TrendingUp } from 'lucide-react';
 
 const Categories = async () => {
-    const categories = await fetcher<Category[]>('/coins/categories');
+    // const categories = await fetcher<Category[]>('/coins/categories');
+    let categories: Category[] = [];
+        
+    try {
+        categories = await fetcher<Category[]>('/coins/categories');
+    } catch (error) {
+        console.error('Error fetching categories:', error);
+        return <div className="error">Failed to load categories</div>;
+    }
 
     const columns: DataTableColumn<Category>[] = [
         {
@@ -30,7 +37,7 @@ const Categories = async () => {
     cell: (category) => {
         const isTrendingUp = category.market_cap_change_24h > 0;
         return (
-            <div className={cn('change-cell000', isTrendingUp ? 'text-green-500' : 'text-red-500')}>
+            <div className={cn('change-cell', isTrendingUp ? 'text-green-500' : 'text-red-500')}>
             <p className="flex items-center">
                 {formatPercentage(category.market_cap_change_24h)}
               {isTrendingUp ? (
