@@ -59,7 +59,7 @@ const CandleStickChart = ({ children, data, coinId, height = 360, initialPeriod 
       chartRef.current = null;
       candleSeriesRef.current = null;
     };
-  }, [height]);
+  }, [height, period]);
 
 
     useEffect(() => {
@@ -68,6 +68,7 @@ const CandleStickChart = ({ children, data, coinId, height = 360, initialPeriod 
     const convertedToSeconds = ohlcData.map(
       (item) => [Math.floor(item[0] / 1000), item[1], item[2], item[3], item[4]] as OHLCData,
     );
+
 
         const converted = convertOHLCData(convertedToSeconds);
         candleSeriesRef.current.setData(converted); 
@@ -81,7 +82,7 @@ const CandleStickChart = ({ children, data, coinId, height = 360, initialPeriod 
             const newData = await fetcher<OHLCData[]>(`/coins/${coinId}/ohlc`, {
                     vs_currency: 'usd',
                     days,
-                    interval, 
+                    // interval, 
                     precision: 'full',
                   });
 
