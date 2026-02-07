@@ -81,7 +81,7 @@ const CandleStickChart = ({ children, data, coinId, height = 360, initialPeriod 
             const newData = await fetcher<OHLCData[]>(`/coins/${coinId}/ohlc`, {
                     vs_currency: 'usd',
                     days,
-                    interval, 
+                    // interval, 
                     precision: 'full',
                   });
 
