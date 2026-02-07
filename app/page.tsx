@@ -7,7 +7,8 @@ import Link from 'next/link'
 import { TrendingDown, TrendingUp } from 'lucide-react'
 import CoinOverview from '@/Components/home/CoinOverview'
 import TrendingCoins from '@/Components/home/TrendingCoins'
-import { CoinOverviewFallback, TrendingCoinsFallback } from '@/Components/home/fallback'
+import { CategoriesFallback, CoinOverviewFallback, TrendingCoinsFallback } from '@/Components/home/fallback'
+import Categories from '@/Components/home/Categories'
 
  const columns: DataTableColumn<TrendingCoin>[] = [
     {
@@ -71,7 +72,9 @@ const Page = async () => {
       </section>
 
       <section className='w-full mt-7 space-y-4'>
-        <p>Categories</p>
+        <Suspense fallback={<CategoriesFallback />}>
+        <Categories />
+        </Suspense>
       </section>
     </main>
   )
