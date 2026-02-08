@@ -49,6 +49,7 @@ const LiveDataWrapper = ({ children, coinId, poolId, coin, coinOHLCData }: LiveD
 
   return (
     <section id="live-data-wrapper">
+        {children}
       <CoinHeader
         name={coin.name}
         image={coin.image.large}

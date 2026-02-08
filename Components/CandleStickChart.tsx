@@ -149,7 +149,8 @@ const CandleStickChart = ({
           ))}
         </div>
 
-        {liveInterval && (
+        {/* {liveInterval && ( */}
+        {liveInterval !== undefined && (
           <div className="button-group">
             <span className="text-sm mx-2 font-medium text-purple-100/50">Update Frequency:</span>
             {LIVE_INTERVAL_BUTTONS.map(({ value, label }) => (
